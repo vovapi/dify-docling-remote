@@ -1,0 +1,105 @@
+annotated-types==0.8.0
+    # via pydantic
+anyio==4.15.1
+    # via httpx
+blinker==1.9.0
+    # via flask
+certifi==2026.10.19
+    # via
+    #   httpcore
+    #   httpx
+    #   requests
+cffi==2.1.1 ; platform_python_implementation == 'CPython' and sys_platform == 'win32'
+    # via gevent
+charset-normalizer==3.5.2
+    # via requests
+click==8.5.0
+    # via flask
+dify-plugin==0.10.2
+    # via dify-docling-remote
+flask==3.1.3
+    # via dify-plugin
+gevent==26.9.0
+    # via dify-plugin
+greenlet==3.5.6 ; platform_python_implementation == 'CPython'
+    # via gevent
+h11==0.16.0
+    # via
+    #   dify-plugin
+    #   httpcore
+httpcore==1.0.9
+    # via httpx
+httpx==0.28.1
+    # via
+    #   dify-docling-remote
+    #   dify-plugin
+idna==3.20
+    # via
+    #   anyio
+    #   httpx
+    #   requests
+    #   yarl
+itsdangerous==2.2.0
+    # via flask
+jinja2==3.1.6
+    # via flask
+markupsafe==3.0.4
+    # via
+    #   flask
+    #   jinja2
+    #   werkzeug
+multidict==7.1.0
+    # via yarl
+packaging==26.3
+    # via dify-plugin
+propcache==0.5.4
+    # via yarl
+pycparser==3.11 ; implementation_name != 'PyPy' and platform_python_implementation == 'CPython' and sys_platform == 'win32'
+    # via cffi
+pydantic==2.14.1
+    # via
+    #   dify-plugin
+    #   pydantic-settings
+pydantic-core==2.50.1
+    # via pydantic
+pydantic-settings==2.16.1
+    # via dify-plugin
+python-dotenv==1.2.4
+    # via pydantic-settings
+pyyaml==6.0.3
+    # via
+    #   dify-docling-remote
+    #   dify-plugin
+regex==2026.9.29
+    # via tiktoken
+requests==2.34.2
+    # via
+    #   dify-plugin
+    #   tiktoken
+socksio==1.0.0
+    # via dify-plugin
+tiktoken==0.14.0
+    # via dify-plugin
+typing-extensions==4.16.0
+    # via
+    #   anyio
+    #   pydantic
+    #   pydantic-core
+    #   pydantic-settings
+    #   typing-inspection
+typing-inspection==0.4.4
+    # via
+    #   pydantic
+    #   pydantic-settings
+urllib3==2.8.0
+    # via requests
+werkzeug==3.1.9
+    # via
+    #   dify-plugin
+    #   flask
+yarl==1.25.1
+    # via dify-plugin
+zope-event==6.2
+    # via gevent
+zope-interface==8.7
+    # via gevent

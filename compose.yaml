@@ -1,0 +1,18 @@
+# Optional standalone server. Join Dify plugin_daemon to docling-remote-network.
+services:
+  docling-serve:
+    image: quay.io/docling-project/docling-serve:v1.21.0
+    ports:
+      - "127.0.0.1:15001:5001"
+    environment:
+      DOCLING_SERVE_ENABLE_UI: "false"
+      DOCLING_SERVE_API_KEY: "${DOCLING_SERVE_API_KEY:?Set a private API key}"
+    volumes:
+      - models:/opt/app-root/src/.cache
+    networks:
+      - docling
+networks:
+  docling:
+    name: docling-remote-network
+volumes:
+  models:

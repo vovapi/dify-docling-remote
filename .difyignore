@@ -1,0 +1,13 @@
+.git/
+.github/
+.venv/
+.cache/
+tests/
+scripts/
+docs/
+dist/
+.env*
+__pycache__/
+.pytest_cache/
+*.pyc
+.DS_Store

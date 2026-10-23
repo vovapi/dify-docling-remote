@@ -1,0 +1,31 @@
+version: 0.1.3
+type: plugin
+author: vovapi
+name: docling_remote
+label:
+  en_US: Docling Remote
+  ru_RU: Docling Remote
+description:
+  en_US: Document conversion, OCR and RAG chunking with your self-hosted Docling Serve.
+  ru_RU: Конвертация, OCR и RAG через ваш Docling Serve.
+icon: icon.svg
+privacy: PRIVACY.md
+repo: https://github.com/vovapi/dify-docling-remote
+created_at: '2026-10-21T00:00:00Z'
+resource:
+  memory: 536870912
+  permission: {}
+plugins:
+  tools:
+  - provider/docling.yaml
+meta:
+  version: 0.0.1
+  arch:
+  - amd64
+  - arm64
+  runner:
+    language: python
+    version: '3.12'
+    entrypoint: main
+tags:
+- productivity

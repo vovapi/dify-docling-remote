@@ -1,0 +1,13 @@
+.venv/
+.cache/
+.env
+__pycache__/
+.pytest_cache/
+*.pyc
+.DS_Store
+dist/
+*.difypkg
+
+# Local project instructions and verification notes
+/AGENTS.md
+/VERIFICATION.md
