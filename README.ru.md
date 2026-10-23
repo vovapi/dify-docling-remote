@@ -6,12 +6,12 @@
 
 ## Установка
 
-1. Разверните Docling Serve отдельно, подготовьте модели и языки OCR. Проверенная версия — **Serve 1.21.0**. См. [инструкцию сервера](https://github.com/docling-project/docling-serve) и проверенные [ограничения зависимостей](docs/serve-requirements.txt).
-2. Скачайте `docling-remote-0.1.3.difypkg` из [релиза v0.1.3](https://github.com/vovapi/dify-docling-remote/releases/tag/v0.1.3) и установите через Dify → Plugins → Install from local package, соблюдая политику администратора для частных плагинов.
+1. Разверните Docling Serve отдельно, подготовьте модели и языки OCR. Проверенная версия — **Serve 1.21.0**. См. [инструкцию сервера](https://github.com/docling-project/docling-serve) и проверенные [ограничения зависимостей](https://github.com/vovapi/dify-docling-remote/blob/v0.1.4/docs/serve-requirements.txt).
+2. Скачайте `docling-remote-0.1.4.difypkg` из [релиза v0.1.4](https://github.com/vovapi/dify-docling-remote/releases/tag/v0.1.4) и установите через Dify → Plugins → Install from local package, соблюдая политику администратора для частных плагинов.
 3. В настройках провайдера задайте **Docling Serve URL**, например `http://docling-serve:5001`, без `/v1`. При необходимости укажите API-ключ, соответствующий `DOCLING_SERVE_API_KEY` сервера.
 4. Выполните **Server health**, добавьте **Convert documents** в workflow и подключите загруженные файлы к входу Documents.
 
-Среда плагина — Python 3.12. В Docker `localhost` означает контейнер плагина: подключите Serve и plugin daemon к общей сети либо используйте шлюз хоста. [Пример Compose](compose.yaml) предоставлен без интеграционной проверки. Для доступа из Dify Cloud к частному серверу нужен отдельно настроенный сетевой маршрут. В недоверенных сетях используйте HTTPS.
+Среда плагина — Python 3.12. В Docker `localhost` означает контейнер плагина: подключите Serve и plugin daemon к общей сети либо используйте шлюз хоста. [Пример Compose](https://github.com/vovapi/dify-docling-remote/blob/v0.1.4/compose.yaml) предоставлен без интеграционной проверки. Для доступа из Dify Cloud к частному серверу нужен отдельно настроенный сетевой маршрут. В недоверенных сетях используйте HTTPS.
 
 ## Использование и ограничения
 
@@ -24,7 +24,7 @@
 
 Полные экспорты и встроенные изображения остаются в ZIP. Из inline JSON удаляются встроенные изображения; его размер ограничен 2 МиБ с учётом Unicode-экранирования. Для больших результатов сохраняется Markdown каждого файла, если он помещается. Иначе `inline_text_omitted` отмечает пропуск текста, а `full_result_in_zip` указывает путь в архиве. Общий текст ограничен 256 тысячами символов с явным уведомлением об обрезке. Следующие узлы анализа должны проверять эти признаки.
 
-[examples/workflow_texts.py](examples/workflow_texts.py) — адаптер для узла Code в Dify: свяжите `docling_json` и `docling_text` с выходами инструмента. Он возвращает `texts` и `files_count`, принимает непустые частичные результаты и отклоняет ошибки документов или пропущенный текст. При отсутствии структурированных результатов отклоняет обрезанный общий текст.
+[examples/workflow_texts.py](https://github.com/vovapi/dify-docling-remote/blob/v0.1.4/examples/workflow_texts.py) — адаптер для узла Code в Dify: свяжите `docling_json` и `docling_text` с выходами инструмента. Он возвращает `texts` и `files_count`, принимает непустые частичные результаты и отклоняет ошибки документов или пропущенный текст. При отсутствии структурированных результатов отклоняет обрезанный общий текст.
 
 ## Совместимость
 

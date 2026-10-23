@@ -6,12 +6,12 @@ A lightweight Dify plugin for a separately deployed **Docling Serve**. Document 
 
 ## Installation
 
-1. Deploy Docling Serve separately and provision its models and OCR languages. The tested baseline is **Serve 1.21.0**; see its [deployment instructions](https://github.com/docling-project/docling-serve) and the tested [server constraints](docs/serve-requirements.txt).
-2. Download `docling-remote-0.1.3.difypkg` from [release v0.1.3](https://github.com/vovapi/dify-docling-remote/releases/tag/v0.1.3) and install it in Dify → Plugins → Install from local package. Follow your administrator's policy for private plugins.
+1. Deploy Docling Serve separately and provision its models and OCR languages. The tested baseline is **Serve 1.21.0**; see its [deployment instructions](https://github.com/docling-project/docling-serve) and the tested [server constraints](https://github.com/vovapi/dify-docling-remote/blob/v0.1.4/docs/serve-requirements.txt).
+2. Download `docling-remote-0.1.4.difypkg` from [release v0.1.4](https://github.com/vovapi/dify-docling-remote/releases/tag/v0.1.4) and install it in Dify → Plugins → Install from local package. Follow your administrator's policy for private plugins.
 3. Configure the provider's **Docling Serve URL**, such as `http://docling-serve:5001`, without `/v1`. Set the optional API key matching `DOCLING_SERVE_API_KEY` on Serve.
 4. Run **Server health**, then add **Convert documents** to a workflow and bind uploaded files to its Documents input.
 
-The plugin runtime uses Python 3.12. In Docker, `localhost` refers to the plugin container: connect Serve and the plugin daemon to a shared network, or use an appropriate host gateway. An optional [Compose example](compose.yaml) is provided but has not been integration-tested. Dify Cloud needs an explicitly configured network path to private servers. Use HTTPS across untrusted networks.
+The plugin runtime uses Python 3.12. In Docker, `localhost` refers to the plugin container: connect Serve and the plugin daemon to a shared network, or use an appropriate host gateway. An optional [Compose example](https://github.com/vovapi/dify-docling-remote/blob/v0.1.4/compose.yaml) is provided but has not been integration-tested. Dify Cloud needs an explicitly configured network path to private servers. Use HTTPS across untrusted networks.
 
 ## Usage and limits
 
@@ -24,7 +24,7 @@ The plugin runtime uses Python 3.12. In Docker, `localhost` refers to the plugin
 
 Full exports and embedded images stay in the ZIP. Inline JSON removes embedded images and is limited to 2 MiB using Unicode-escaped serialization. Large results retain per-file Markdown when it fits; otherwise `inline_text_omitted` marks omitted text and `full_result_in_zip` points to the archive. Combined text is limited to 256K characters with an explicit truncation notice. Downstream analysis must check these markers.
 
-[examples/workflow_texts.py](examples/workflow_texts.py) provides a Dify Code node adapter: bind `docling_json` and `docling_text` to the tool outputs. It returns `texts` and `files_count`, accepts nonempty partial results and rejects failed documents or omitted text. If structured results are unavailable, it rejects truncated combined text.
+[examples/workflow_texts.py](https://github.com/vovapi/dify-docling-remote/blob/v0.1.4/examples/workflow_texts.py) provides a Dify Code node adapter: bind `docling_json` and `docling_text` to the tool outputs. It returns `texts` and `files_count`, accepts nonempty partial results and rejects failed documents or omitted text. If structured results are unavailable, it rejects truncated combined text.
 
 ## Compatibility
 
