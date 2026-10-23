@@ -1,0 +1,7 @@
+# Optional server environment; never install these in the Dify plugin runtime.
+docling-serve==1.21.0
+docling==2.140.0
+docling-slim==2.140.0
+docling-core==2.103.1
+docling-jobkit==1.24.0
+easyocr==1.7.2

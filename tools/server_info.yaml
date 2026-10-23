@@ -1,0 +1,14 @@
+identity:
+  name: server_info
+  author: vovapi
+  label:
+    en_US: Server health
+    ru_RU: Проверка сервера
+description:
+  human:
+    en_US: Check connectivity to the configured Docling Serve.
+  llm: Check Docling Serve health.
+parameters: []
+extra:
+  python:
+    source: tools/server_info.py

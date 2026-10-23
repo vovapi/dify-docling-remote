@@ -1,0 +1,16 @@
+name: Validate
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.13.1"
+          python-version: "3.12"
+      - run: uv sync --frozen
+      - run: uv run pytest -q
+      - run: uv export --frozen --no-dev --no-hashes --no-header -o /tmp/requirements.txt && diff requirements.txt /tmp/requirements.txt

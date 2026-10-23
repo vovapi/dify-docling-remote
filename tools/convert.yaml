@@ -1,0 +1,411 @@
+identity:
+  name: convert
+  author: vovapi
+  label:
+    en_US: Convert documents
+    ru_RU: Конвертация документов
+    zh_Hans: 转换文档
+    ja_JP: 文書変換
+    pt_BR: Converter documentos
+description:
+  human:
+    en_US: Document conversion, OCR and RAG chunking with your self-hosted Docling
+      Serve.
+    ru_RU: Конвертация, OCR и RAG через ваш Docling Serve.
+  llm: Convert uploaded documents using the configured self-hosted Docling Serve.
+    Returns text, structured JSON and a ZIP archive.
+parameters:
+- name: files
+  type: files
+  required: false
+  label:
+    en_US: Documents
+    ru_RU: Документы
+    zh_Hans: Documents
+    ja_JP: Documents
+    pt_BR: Documents
+  human_description:
+    en_US: Provide 1–10 uploaded files, at most 50 MiB each. Documents are sent to
+      your Docling Serve.
+  llm_description: Provide 1–10 uploaded files, at most 50 MiB each. Documents are
+    sent to your Docling Serve.
+  form: llm
+- name: output_formats
+  type: string
+  required: false
+  label:
+    en_US: Output formats
+    ru_RU: Форматы экспорта
+    zh_Hans: Output formats
+    ja_JP: Output formats
+    pt_BR: Output formats
+  human_description:
+    en_US: 'Comma-separated: md,json,html,text,doctags.'
+  llm_description: 'Comma-separated: md,json,html,text,doctags.'
+  form: form
+  default: md,json
+- name: pipeline
+  type: select
+  required: false
+  label:
+    en_US: Pipeline
+    ru_RU: Конвейер
+    zh_Hans: Pipeline
+    ja_JP: Pipeline
+    pt_BR: Pipeline
+  human_description:
+    en_US: Runs on Docling Serve. VLM requires server-side models.
+  llm_description: Runs on Docling Serve. VLM requires server-side models.
+  form: form
+  default: standard
+  options:
+  - value: standard
+    label:
+      en_US: standard
+      ru_RU: standard
+      zh_Hans: standard
+      ja_JP: standard
+      pt_BR: standard
+  - value: vlm
+    label:
+      en_US: vlm
+      ru_RU: vlm
+      zh_Hans: vlm
+      ja_JP: vlm
+      pt_BR: vlm
+- name: ocr_engine
+  type: select
+  required: false
+  label:
+    en_US: OCR engine
+    ru_RU: Движок OCR
+    zh_Hans: OCR engine
+    ja_JP: OCR engine
+    pt_BR: OCR engine
+  human_description:
+    en_US: OCR engine installed on Docling Serve.
+  llm_description: OCR engine installed on Docling Serve.
+  form: form
+  default: auto
+  options:
+  - value: easyocr
+    label:
+      en_US: easyocr
+      ru_RU: easyocr
+      zh_Hans: easyocr
+      ja_JP: easyocr
+      pt_BR: easyocr
+  - value: rapidocr
+    label:
+      en_US: rapidocr
+      ru_RU: rapidocr
+      zh_Hans: rapidocr
+      ja_JP: rapidocr
+      pt_BR: rapidocr
+  - value: tesseract
+    label:
+      en_US: tesseract
+      ru_RU: tesseract
+      zh_Hans: tesseract
+      ja_JP: tesseract
+      pt_BR: tesseract
+  - value: auto
+    label:
+      en_US: auto
+      ru_RU: auto
+      zh_Hans: auto
+      ja_JP: auto
+      pt_BR: auto
+- name: ocr_languages
+  type: string
+  required: false
+  label:
+    en_US: OCR languages
+    ru_RU: Языки OCR
+    zh_Hans: OCR languages
+    ja_JP: OCR languages
+    pt_BR: OCR languages
+  human_description:
+    en_US: Comma-separated engine-native languages, e.g. ru,en. Requires server-side
+      language support.
+  llm_description: Comma-separated engine-native languages, e.g. ru,en. Requires server-side
+    language support.
+  form: form
+  default: en
+- name: do_ocr
+  type: boolean
+  required: false
+  label:
+    en_US: Enable OCR
+    ru_RU: Включить OCR
+    zh_Hans: Enable OCR
+    ja_JP: Enable OCR
+    pt_BR: Enable OCR
+  human_description:
+    en_US: Executed on Docling Serve; models and dependencies must be configured on
+      the server.
+  llm_description: Executed on Docling Serve; models and dependencies must be configured
+    on the server.
+  form: form
+  default: true
+- name: force_ocr
+  type: boolean
+  required: false
+  label:
+    en_US: Full-page OCR
+    ru_RU: OCR всей страницы
+    zh_Hans: Full-page OCR
+    ja_JP: Full-page OCR
+    pt_BR: Full-page OCR
+  human_description:
+    en_US: Executed on Docling Serve; models and dependencies must be configured on
+      the server.
+  llm_description: Executed on Docling Serve; models and dependencies must be configured
+    on the server.
+  form: form
+  default: false
+- name: do_table_structure
+  type: boolean
+  required: false
+  label:
+    en_US: Extract tables
+    ru_RU: Извлечение таблиц
+    zh_Hans: Extract tables
+    ja_JP: Extract tables
+    pt_BR: Extract tables
+  human_description:
+    en_US: Executed on Docling Serve; models and dependencies must be configured on
+      the server.
+  llm_description: Executed on Docling Serve; models and dependencies must be configured
+    on the server.
+  form: form
+  default: true
+- name: do_code_enrichment
+  type: boolean
+  required: false
+  label:
+    en_US: Recognize code
+    ru_RU: Распознавание кода
+    zh_Hans: Recognize code
+    ja_JP: Recognize code
+    pt_BR: Recognize code
+  human_description:
+    en_US: Executed on Docling Serve; models and dependencies must be configured on
+      the server.
+  llm_description: Executed on Docling Serve; models and dependencies must be configured
+    on the server.
+  form: form
+  default: false
+- name: do_formula_enrichment
+  type: boolean
+  required: false
+  label:
+    en_US: Recognize formulas
+    ru_RU: Распознавание формул
+    zh_Hans: Recognize formulas
+    ja_JP: Recognize formulas
+    pt_BR: Recognize formulas
+  human_description:
+    en_US: Executed on Docling Serve; models and dependencies must be configured on
+      the server.
+  llm_description: Executed on Docling Serve; models and dependencies must be configured
+    on the server.
+  form: form
+  default: false
+- name: do_picture_classification
+  type: boolean
+  required: false
+  label:
+    en_US: Classify pictures
+    ru_RU: Классификация изображений
+    zh_Hans: Classify pictures
+    ja_JP: Classify pictures
+    pt_BR: Classify pictures
+  human_description:
+    en_US: Executed on Docling Serve; models and dependencies must be configured on
+      the server.
+  llm_description: Executed on Docling Serve; models and dependencies must be configured
+    on the server.
+  form: form
+  default: false
+- name: do_picture_description
+  type: boolean
+  required: false
+  label:
+    en_US: Describe pictures
+    ru_RU: Описание изображений
+    zh_Hans: Describe pictures
+    ja_JP: Describe pictures
+    pt_BR: Describe pictures
+  human_description:
+    en_US: Executed on Docling Serve; models and dependencies must be configured on
+      the server.
+  llm_description: Executed on Docling Serve; models and dependencies must be configured
+    on the server.
+  form: form
+  default: false
+- name: fail_fast
+  type: boolean
+  required: false
+  label:
+    en_US: Stop on failure
+    ru_RU: Остановка при ошибке
+    zh_Hans: Stop on failure
+    ja_JP: Stop on failure
+    pt_BR: Stop on failure
+  human_description:
+    en_US: Stop the batch after the first failed document. Otherwise return successful
+      documents with per-document errors.
+  llm_description: Stop the batch after the first failed document. Otherwise return
+    successful documents with per-document errors.
+  form: form
+  default: false
+- name: table_mode
+  type: select
+  required: false
+  label:
+    en_US: Table mode
+    ru_RU: Режим таблиц
+    zh_Hans: Table mode
+    ja_JP: Table mode
+    pt_BR: Table mode
+  human_description:
+    en_US: Executed on Docling Serve; models and dependencies must be configured on
+      the server.
+  llm_description: Executed on Docling Serve; models and dependencies must be configured
+    on the server.
+  form: form
+  default: accurate
+  options:
+  - value: accurate
+    label:
+      en_US: accurate
+      ru_RU: accurate
+      zh_Hans: accurate
+      ja_JP: accurate
+      pt_BR: accurate
+  - value: fast
+    label:
+      en_US: fast
+      ru_RU: fast
+      zh_Hans: fast
+      ja_JP: fast
+      pt_BR: fast
+- name: timeout
+  type: number
+  required: false
+  label:
+    en_US: Total timeout (seconds)
+    ru_RU: Общий таймаут (секунды)
+    zh_Hans: Total timeout (seconds)
+    ja_JP: Total timeout (seconds)
+    pt_BR: Total timeout (seconds)
+  human_description:
+    en_US: Deadline per document, 10–7000 seconds. Align Dify workflow and daemon
+      timeouts.
+  llm_description: Deadline per document, 10–7000 seconds. Align Dify workflow and
+    daemon timeouts.
+  form: form
+  default: 600
+- name: max_tokens
+  type: number
+  required: false
+  label:
+    en_US: Chunk token limit
+    ru_RU: Лимит токенов фрагмента
+    zh_Hans: Chunk token limit
+    ja_JP: Chunk token limit
+    pt_BR: Chunk token limit
+  human_description:
+    en_US: Hybrid chunk size, 32–32768 tokens.
+  llm_description: Hybrid chunk size, 32–32768 tokens.
+  form: form
+  default: 512
+- name: chunking
+  type: select
+  required: false
+  label:
+    en_US: RAG chunking
+    ru_RU: Разбиение для RAG
+    zh_Hans: RAG chunking
+    ja_JP: RAG chunking
+    pt_BR: RAG chunking
+  human_description:
+    en_US: Server-side RAG chunking. Hybrid may download a tokenizer on the server.
+  llm_description: Server-side RAG chunking. Hybrid may download a tokenizer on the
+    server.
+  form: form
+  default: none
+  options:
+  - value: none
+    label:
+      en_US: none
+      ru_RU: none
+      zh_Hans: none
+      ja_JP: none
+      pt_BR: none
+  - value: hierarchical
+    label:
+      en_US: hierarchical
+      ru_RU: hierarchical
+      zh_Hans: hierarchical
+      ja_JP: hierarchical
+      pt_BR: hierarchical
+  - value: hybrid
+    label:
+      en_US: hybrid
+      ru_RU: hybrid
+      zh_Hans: hybrid
+      ja_JP: hybrid
+      pt_BR: hybrid
+- name: first_page
+  type: number
+  required: false
+  label:
+    en_US: First page
+  human_description:
+    en_US: First page, starting at 1.
+  llm_description: First page, starting at 1.
+  form: form
+  default: 1
+- name: last_page
+  type: number
+  required: false
+  label:
+    en_US: Last page
+  human_description:
+    en_US: Last page, inclusive.
+  llm_description: Last page, inclusive.
+  form: form
+  default: 100000
+- name: include_page_images
+  type: boolean
+  required: false
+  label:
+    en_US: Page images
+  human_description:
+    en_US: Embed page images in JSON; increases response size.
+  llm_description: Embed page images in JSON; increases response size.
+  form: form
+  default: false
+- name: pdf_backend
+  type: select
+  required: false
+  label:
+    en_US: PDF backend
+  human_description:
+    en_US: pypdfium2 is compatible with Serve 1.21.0. Use docling_parse only with
+      a compatible server/Jobkit.
+  llm_description: PDF parser on the server.
+  form: form
+  default: pypdfium2
+  options:
+  - value: pypdfium2
+    label:
+      en_US: pypdfium2
+  - value: docling_parse
+    label:
+      en_US: docling_parse
+extra:
+  python:
+    source: tools/convert.py

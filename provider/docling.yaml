@@ -1,0 +1,39 @@
+identity:
+  author: vovapi
+  name: docling_remote
+  label:
+    en_US: Docling Remote
+    ru_RU: Docling Remote
+  description:
+    en_US: Document conversion, OCR and RAG chunking with your self-hosted Docling
+      Serve.
+    ru_RU: Конвертация, OCR и RAG через ваш Docling Serve.
+  icon: icon.svg
+  tags:
+  - productivity
+credentials_for_provider:
+  server_url:
+    type: text-input
+    required: true
+    label:
+      en_US: Docling Serve URL
+      ru_RU: Адрес Docling Serve
+    placeholder:
+      en_US: http://docling-serve:5001
+    help:
+      en_US: Base URL reachable from the plugin runtime. Private network addresses
+        are supported.
+  api_key:
+    type: secret-input
+    required: false
+    label:
+      en_US: API key
+      ru_RU: API-ключ
+    help:
+      en_US: Optional DOCLING_SERVE_API_KEY; sent as X-Api-Key.
+tools:
+- tools/convert.yaml
+- tools/server_info.yaml
+extra:
+  python:
+    source: provider/docling.py
