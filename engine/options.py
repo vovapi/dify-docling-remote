@@ -41,6 +41,11 @@ def parse(parameters):
                'pipeline': choice(parameters.get('pipeline'), 'standard', ('standard', 'vlm')),
                'ocr_engine': choice(parameters.get('ocr_engine'), 'auto', ('auto', 'easyocr', 'rapidocr', 'tesseract')),
                'table_mode': choice(parameters.get('table_mode'), 'accurate', ('accurate', 'fast'))}
+    vlm_preset = str(parameters.get('vlm_preset') or '').strip()
+    if vlm_preset:
+        if options['pipeline'] != 'vlm':
+            raise ValueError('vlm_preset requires pipeline: vlm')
+        options['vlm_pipeline_preset'] = vlm_preset
     for name, default in [('do_ocr', True), ('force_ocr', False), ('do_table_structure', True),
                           ('do_code_enrichment', False), ('do_formula_enrichment', False),
                           ('do_picture_classification', False), ('do_picture_description', False),
