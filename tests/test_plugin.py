@@ -35,10 +35,67 @@ def test_internal_server_and_source():
         file_source('a', b'')
 
 
-@pytest.mark.parametrize('parameters', [{'timeout':True},{'timeout':float('nan')},{'first_page':5,'last_page':2},{'chunking':'shell'},{'output_formats':'zip'},{'do_ocr':'yes'}])
+@pytest.mark.parametrize('parameters', [{'timeout':True},{'timeout':float('nan')},{'first_page':5,'last_page':2},{'chunking':'shell'},{'output_formats':'zip'},{'do_ocr':'yes'},
+                                      {'pipeline':'standard','vlm_preset':'unlimited_ocr_2'}, {'vlm_preset':'unlimited_ocr_2'}])
 def test_invalid_options(parameters):
     with pytest.raises(ValueError):
         parse(parameters)
+
+
+@pytest.mark.parametrize('preset', ['unlimited_ocr_2', ' default ', ' arbitrary_custom_id '])
+def test_vlm_preset_options(preset):
+    options, _, _, _ = parse({'pipeline': 'vlm', 'vlm_preset': preset})
+    assert options['vlm_pipeline_preset'] == preset.strip()
+
+
+@pytest.mark.parametrize('pipeline', ['standard', 'vlm'])
+@pytest.mark.parametrize('parameters', [{}, {'vlm_preset': None}, {'vlm_preset': ''}, {'vlm_preset': ' \t\n '}])
+def test_empty_vlm_preset_preserves_options(pipeline, parameters):
+    result = parse({'pipeline': pipeline, **parameters})
+    assert 'vlm_pipeline_preset' not in result[0]
+    assert result == parse({'pipeline': pipeline})
+
+
+@pytest.mark.parametrize('parameters,preset', [
+    ({'pipeline': 'vlm', 'vlm_preset': ' unlimited_ocr_2 '}, 'unlimited_ocr_2'),
+    ({'pipeline': 'vlm'}, None),
+    ({'pipeline': 'vlm', 'vlm_preset': ''}, None),
+    ({}, None),
+    ({'vlm_preset': ''}, None),
+])
+def test_vlm_preset_convert_request(monkeypatch, parameters, preset):
+    # Baseline options from 0.1.4: empty presets must preserve serialized requests.
+    expected_options = {
+        'to_formats': ['md', 'json'], 'image_export_mode': 'embedded',
+        'pdf_backend': 'pypdfium2', 'pipeline': parameters.get('pipeline', 'standard'),
+        'ocr_engine': 'auto', 'table_mode': 'accurate', 'do_ocr': True,
+        'force_ocr': False, 'do_table_structure': True, 'do_code_enrichment': False,
+        'do_formula_enrichment': False, 'do_picture_classification': False,
+        'do_picture_description': False, 'include_page_images': False,
+        'page_range': [1, 100000], 'document_timeout': 600,
+    }
+    if preset:
+        expected_options['vlm_pipeline_preset'] = preset
+    source = file_source('a.html', b'hello')
+    posts = []
+    def handler(request):
+        if request.method == 'POST':
+            assert request.url.path == '/v1/convert/source/async'
+            expected = httpx.Request('POST', str(request.url), json={
+                'sources': [source], 'target': {'kind': 'inbody'}, 'options': expected_options,
+            })
+            assert json.loads(request.content) == json.loads(expected.content)
+            if preset is None:
+                assert request.content == expected.content
+            posts.append(request)
+            return httpx.Response(200, json={'task_id': 'abc', 'task_status': 'success'})
+        return httpx.Response(200, json={'status': 'success', 'document': {'md_content': 'hello'}})
+    monkeypatch.setattr('tools.convert.ServeClient', lambda credentials, timeout:
+                        ServeClient(credentials, timeout, transport=httpx.MockTransport(handler)))
+    tool = ConvertTool(ToolRuntime(credentials={'server_url': 'http://serve'}, user_id=None, session_id=None), None)
+    messages = list(tool._invoke({**parameters, 'files': [SimpleNamespace(filename='a.html', blob=b'hello')]}))
+    assert messages[-1].message.json_object['documents'][0]['status'] == 'success'
+    assert len(posts) == 1
 
 
 def test_async_contract(monkeypatch):

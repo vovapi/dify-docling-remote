@@ -73,6 +73,23 @@ parameters:
       zh_Hans: vlm
       ja_JP: vlm
       pt_BR: vlm
+- name: vlm_preset
+  type: string
+  required: false
+  label:
+    en_US: VLM preset
+    ru_RU: VLM-пресет
+    zh_Hans: VLM 预设
+    ja_JP: VLMプリセット
+    pt_BR: Preset VLM
+  human_description:
+    en_US: 'Optional server-side VLM preset ID. Requires pipeline: vlm. Custom presets
+      must be registered on Docling Serve. Leave empty to keep server defaults.'
+    ru_RU: 'Необязательный ID VLM-пресета сервера. Требует pipeline: vlm. Пользовательский
+      пресет нужно зарегистрировать в Docling Serve. Пустое поле сохраняет настройки сервера.'
+  llm_description: 'Server-side VLM preset ID, e.g. unlimited_ocr_2. Use only with
+    pipeline: vlm. Custom presets must be registered on Docling Serve. Omit to keep server defaults.'
+  form: form
 - name: ocr_engine
   type: select
   required: false
